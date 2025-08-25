@@ -8,11 +8,23 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html, body, #root {
+    font-family: 'Palatino Linotype', 'Libre Baskerville', 'Book Antiqua', Palatino, serif;
+  }
+
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Palatino Linotype', 'Libre Baskerville', 'Book Antiqua', Palatino, serif;
     background-color: #0a0a0a;
     color: #ffffff;
     line-height: 1.5;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Palatino Linotype', 'Libre Baskerville', 'Book Antiqua', Palatino, serif;
+  }
+
+  input, button, textarea, select {
+    font-family: 'Palatino Linotype', 'Libre Baskerville', 'Book Antiqua', Palatino, serif;
   }
 
   #root {
