@@ -335,7 +335,7 @@ export function useNewsData() {
 }
 
 // Utility functions (keep existing ones)
-export const formatCurrency = (amount, currency = 'USD') => {
+export const formatCurrency = (amount: number, currency: string = 'USD') => {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: currency,
@@ -344,7 +344,7 @@ export const formatCurrency = (amount, currency = 'USD') => {
   }).format(amount);
 };
 
-export const formatNumber = (number) => {
+export const formatNumber = (number: number) => {
   if (number >= 1e12) {
     return (number / 1e12).toFixed(1) + 'T';
   }
@@ -360,14 +360,14 @@ export const formatNumber = (number) => {
   return number.toLocaleString();
 };
 
-export const formatPercentage = (percentage) => {
+export const formatPercentage = (percentage: number) => {
   return `${percentage >= 0 ? '+' : ''}${percentage.toFixed(2)}%`;
 };
 
 // API functions for direct REST calls
 export const stockAPI = {
   getAll: () => fetch(`${BACKEND_URL}/api/stocks`).then(res => res.json()),
-  getBySymbol: (symbol) => fetch(`${BACKEND_URL}/api/stock/${symbol}`).then(res => res.json()),
+  getBySymbol: (symbol: string) => fetch(`${BACKEND_URL}/api/stock/${symbol}`).then(res => res.json()),
 };
 
 export const marketAPI = {
