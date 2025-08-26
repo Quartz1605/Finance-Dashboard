@@ -29,6 +29,16 @@ const TopBar = styled.div`
   justify-content: space-between;
   padding: ${theme.spacing.md} ${theme.spacing.xl};
   border-bottom: 1px solid ${theme.colors.border};
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    padding: ${theme.spacing.md} ${theme.spacing.lg};
+    flex-wrap: wrap;
+    gap: ${theme.spacing.sm};
+  }
+
+  @media (max-width: 480px) {
+    padding: ${theme.spacing.sm} ${theme.spacing.md};
+  }
 `;
 
 const Logo = styled.div`
@@ -48,6 +58,17 @@ const SearchBar = styled.div`
   border-radius: ${theme.borderRadius.md};
   padding: ${theme.spacing.sm} ${theme.spacing.md};
   width: 400px;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    width: 300px;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    order: 3;
+    flex-basis: 100%;
+    margin-top: ${theme.spacing.sm};
+  }
 
   input {
     background: transparent;
@@ -115,11 +136,31 @@ const Navigation = styled.nav`
   display: flex;
   align-items: center;
   padding: 0 ${theme.spacing.xl};
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    padding: 0 ${theme.spacing.lg};
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 ${theme.spacing.md};
+  }
 `;
 
 const NavLinks = styled.div`
   display: flex;
   gap: ${theme.spacing.xs};
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    flex-wrap: nowrap;
+    min-width: max-content;
+  }
 `;
 
 const NavLink = styled(Link)<{ $active?: boolean }>`

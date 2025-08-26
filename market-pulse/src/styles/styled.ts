@@ -8,6 +8,17 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html {
+    font-size: 16px;
+    
+    @media (max-width: 768px) {
+      font-size: 15px;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 14px;
+    }
+  }
 
   html, body, #root {
     font-family: 'Quicksand', 'Segoe UI', Arial, sans-serif;
@@ -18,6 +29,7 @@ export const GlobalStyle = createGlobalStyle`
     background-color: #0a0a0a;
     color: #ffffff;
     line-height: 1.5;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -30,6 +42,25 @@ export const GlobalStyle = createGlobalStyle`
 
   #root {
     min-height: 100vh;
+  }
+
+  /* Improved scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #666;
   }
 `;
 
@@ -91,6 +122,10 @@ export const Container = styled.div`
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 ${theme.spacing.md};
+
+  @media (max-width: 480px) {
+    padding: 0 ${theme.spacing.sm};
+  }
 
   @media (min-width: ${theme.breakpoints.lg}) {
     padding: 0 ${theme.spacing.xl};
