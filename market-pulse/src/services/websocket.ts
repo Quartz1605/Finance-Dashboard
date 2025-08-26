@@ -56,9 +56,18 @@ export interface Cryptocurrency {
   lastUpdated: Date;
 }
 
-// WebSocket connection
-const BACKEND_URL = 'http://localhost:3001';
+// API configuration - Use relative paths for Vercel deployment
+const BACKEND_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001';
 let socket: Socket | null = null;
+
+// Polling intervals for different data types
+const POLLING_INTERVALS = {
+  stocks: 3000,
+  indices: 5000,
+  currencies: 7000,
+  cryptos: 4000,
+  news: 60000, // News updates less frequently
+};
 
 const initializeSocket = (): Socket => {
   if (!socket) {
@@ -84,55 +93,37 @@ const initializeSocket = (): Socket => {
   return socket;
 };
 
-// Real-time hooks using WebSocket data
+// Real-time hooks using REST API polling for Vercel deployment
 export function useStockData() {
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
-    const socketConnection = initializeSocket();
-    
-    // Listen for stock updates
-    socketConnection.on('stocks-update', (data: any[]) => {
-      setStocks(data.map((stock: any) => ({
-        ...stock,
-        lastUpdated: new Date(stock.lastUpdated)
-      })));
-      setLoading(false);
-      setError(null);
-    });
-    
-    // Handle connection errors
-    socketConnection.on('connect_error', () => {
-      setError('Failed to connect to market data server');
-      setLoading(false);
-    });
-    
-    // Request initial data if already connected
-    if (socketConnection.connected) {
-      // Fetch initial data via REST API as fallback
-      fetch(`${BACKEND_URL}/api/stocks`)
-        .then(res => res.json())
-        .then((data: any[]) => {
-          setStocks(data.map((stock: any) => ({
-            ...stock,
-            lastUpdated: new Date(stock.lastUpdated)
-          })));
-          setLoading(false);
-        })
-        .catch(() => {
-          setError('Failed to fetch initial stock data');
-          setLoading(false);
-        });
-    }
-    
-    return () => {
-      if (socketConnection) {
-        socketConnection.off('stocks-update');
-        socketConnection.off('connect_error');
+    const fetchStocks = async () => {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/stocks`);
+        if (!response.ok) throw new Error('Failed to fetch stocks');
+        const data = await response.json();
+        setStocks(data.map((stock: any) => ({
+          ...stock,
+          lastUpdated: new Date(stock.lastUpdated)
+        })));
+        setLoading(false);
+        setError(null);
+      } catch (err) {
+        setError('Failed to fetch stock data');
+        setLoading(false);
       }
     };
+
+    // Initial fetch
+    fetchStocks();
+    
+    // Set up polling
+    const interval = setInterval(fetchStocks, POLLING_INTERVALS.stocks);
+    
+    return () => clearInterval(interval);
   }, []);
   
   return { stocks, loading, error };
@@ -144,44 +135,30 @@ export function useMarketIndices() {
   const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
-    const socketConnection = initializeSocket();
-    
-    socketConnection.on('indices-update', (data: any[]) => {
-      setIndices(data.map((index: any) => ({
-        ...index,
-        lastUpdated: new Date(index.lastUpdated)
-      })));
-      setLoading(false);
-      setError(null);
-    });
-    
-    socketConnection.on('connect_error', () => {
-      setError('Failed to connect to market data server');
-      setLoading(false);
-    });
-    
-    if (socketConnection.connected) {
-      fetch(`${BACKEND_URL}/api/indices`)
-        .then(res => res.json())
-        .then((data: any[]) => {
-          setIndices(data.map((index: any) => ({
-            ...index,
-            lastUpdated: new Date(index.lastUpdated)
-          })));
-          setLoading(false);
-        })
-        .catch(() => {
-          setError('Failed to fetch initial indices data');
-          setLoading(false);
-        });
-    }
-    
-    return () => {
-      if (socketConnection) {
-        socketConnection.off('indices-update');
-        socketConnection.off('connect_error');
+    const fetchIndices = async () => {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/indices`);
+        if (!response.ok) throw new Error('Failed to fetch indices');
+        const data = await response.json();
+        setIndices(data.map((index: any) => ({
+          ...index,
+          lastUpdated: new Date(index.lastUpdated)
+        })));
+        setLoading(false);
+        setError(null);
+      } catch (err) {
+        setError('Failed to fetch indices data');
+        setLoading(false);
       }
     };
+
+    // Initial fetch
+    fetchIndices();
+    
+    // Set up polling
+    const interval = setInterval(fetchIndices, POLLING_INTERVALS.indices);
+    
+    return () => clearInterval(interval);
   }, []);
   
   return { indices, loading, error };
@@ -193,44 +170,30 @@ export function useCurrencyPairs() {
   const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
-    const socketConnection = initializeSocket();
-    
-    socketConnection.on('currencies-update', (data: any[]) => {
-      setCurrencies(data.map((currency: any) => ({
-        ...currency,
-        lastUpdated: new Date(currency.lastUpdated)
-      })));
-      setLoading(false);
-      setError(null);
-    });
-    
-    socketConnection.on('connect_error', () => {
-      setError('Failed to connect to market data server');
-      setLoading(false);
-    });
-    
-    if (socketConnection.connected) {
-      fetch(`${BACKEND_URL}/api/currencies`)
-        .then(res => res.json())
-        .then((data: any[]) => {
-          setCurrencies(data.map((currency: any) => ({
-            ...currency,
-            lastUpdated: new Date(currency.lastUpdated)
-          })));
-          setLoading(false);
-        })
-        .catch(() => {
-          setError('Failed to fetch initial currency data');
-          setLoading(false);
-        });
-    }
-    
-    return () => {
-      if (socketConnection) {
-        socketConnection.off('currencies-update');
-        socketConnection.off('connect_error');
+    const fetchCurrencies = async () => {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/currencies`);
+        if (!response.ok) throw new Error('Failed to fetch currencies');
+        const data = await response.json();
+        setCurrencies(data.map((currency: any) => ({
+          ...currency,
+          lastUpdated: new Date(currency.lastUpdated)
+        })));
+        setLoading(false);
+        setError(null);
+      } catch (err) {
+        setError('Failed to fetch currency data');
+        setLoading(false);
       }
     };
+
+    // Initial fetch
+    fetchCurrencies();
+    
+    // Set up polling
+    const interval = setInterval(fetchCurrencies, POLLING_INTERVALS.currencies);
+    
+    return () => clearInterval(interval);
   }, []);
   
   return { currencies, loading, error };
@@ -242,44 +205,30 @@ export function useCryptoData() {
   const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
-    const socketConnection = initializeSocket();
-    
-    socketConnection.on('cryptos-update', (data: any[]) => {
-      setCryptos(data.map((crypto: any) => ({
-        ...crypto,
-        lastUpdated: new Date(crypto.lastUpdated)
-      })));
-      setLoading(false);
-      setError(null);
-    });
-    
-    socketConnection.on('connect_error', () => {
-      setError('Failed to connect to market data server');
-      setLoading(false);
-    });
-    
-    if (socketConnection.connected) {
-      fetch(`${BACKEND_URL}/api/cryptos`)
-        .then(res => res.json())
-        .then((data: any[]) => {
-          setCryptos(data.map((crypto: any) => ({
-            ...crypto,
-            lastUpdated: new Date(crypto.lastUpdated)
-          })));
-          setLoading(false);
-        })
-        .catch(() => {
-          setError('Failed to fetch initial crypto data');
-          setLoading(false);
-        });
-    }
-    
-    return () => {
-      if (socketConnection) {
-        socketConnection.off('cryptos-update');
-        socketConnection.off('connect_error');
+    const fetchCryptos = async () => {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/cryptos`);
+        if (!response.ok) throw new Error('Failed to fetch cryptos');
+        const data = await response.json();
+        setCryptos(data.map((crypto: any) => ({
+          ...crypto,
+          lastUpdated: new Date(crypto.lastUpdated)
+        })));
+        setLoading(false);
+        setError(null);
+      } catch (err) {
+        setError('Failed to fetch crypto data');
+        setLoading(false);
       }
     };
+
+    // Initial fetch
+    fetchCryptos();
+    
+    // Set up polling
+    const interval = setInterval(fetchCryptos, POLLING_INTERVALS.cryptos);
+    
+    return () => clearInterval(interval);
   }, []);
   
   return { cryptos, loading, error };
@@ -291,44 +240,30 @@ export function useNewsData() {
   const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
-    const socketConnection = initializeSocket();
-    
-    socketConnection.on('news-update', (data: any[]) => {
-      setNews(data.map((item: any) => ({
-        ...item,
-        publishedAt: new Date(item.publishedAt)
-      })));
-      setLoading(false);
-      setError(null);
-    });
-    
-    socketConnection.on('connect_error', () => {
-      setError('Failed to connect to market data server');
-      setLoading(false);
-    });
-    
-    if (socketConnection.connected) {
-      fetch(`${BACKEND_URL}/api/news`)
-        .then(res => res.json())
-        .then((data: any[]) => {
-          setNews(data.map((item: any) => ({
-            ...item,
-            publishedAt: new Date(item.publishedAt)
-          })));
-          setLoading(false);
-        })
-        .catch(() => {
-          setError('Failed to fetch news data');
-          setLoading(false);
-        });
-    }
-    
-    return () => {
-      if (socketConnection) {
-        socketConnection.off('news-update');
-        socketConnection.off('connect_error');
+    const fetchNews = async () => {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/news`);
+        if (!response.ok) throw new Error('Failed to fetch news');
+        const data = await response.json();
+        setNews(data.map((item: any) => ({
+          ...item,
+          publishedAt: new Date(item.publishedAt)
+        })));
+        setLoading(false);
+        setError(null);
+      } catch (err) {
+        setError('Failed to fetch news data');
+        setLoading(false);
       }
     };
+
+    // Initial fetch
+    fetchNews();
+    
+    // Set up polling (news updates less frequently)
+    const interval = setInterval(fetchNews, POLLING_INTERVALS.news);
+    
+    return () => clearInterval(interval);
   }, []);
   
   return { news, loading, error };

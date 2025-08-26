@@ -1,0 +1,9 @@
+dev-server.js
+node_modules
+.git
+README.md
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.log
