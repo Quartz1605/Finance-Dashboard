@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Container } from '../styles/styled';
+import { Container, theme } from '../styles/styled';
 import { MarketOverview } from '../components/MarketOverview';
 import { Watchlist } from '../components/Watchlist';
 import { StockChart } from '../components/StockChart';
@@ -16,11 +16,27 @@ import {
 
 const DashboardContainer = styled.div`
   padding: 2rem 0;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    padding: 1.5rem 0;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem 0;
+  }
 `;
 
 const DashboardGrid = styled.div`
   display: grid;
   gap: 2rem;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    gap: 1rem;
+  }
 `;
 
 export const Dashboard: React.FC = () => {

@@ -48,10 +48,16 @@ const StocksGrid = styled.div`
   
   @media (max-width: ${theme.breakpoints.lg}) {
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.25rem;
   }
   
   @media (max-width: ${theme.breakpoints.md}) {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.75rem;
   }
 `;
 
@@ -68,6 +74,16 @@ const StockCard = styled(Card)`
     transform: translateY(-2px);
     box-shadow: ${theme.shadows.lg};
     background: ${theme.colors.surfaceHover};
+  }
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
   }
 `;
 
@@ -121,6 +137,17 @@ const StockMetrics = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
   margin-bottom: 1rem;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
 `;
 
 const MetricItem = styled.div``;
@@ -144,6 +171,16 @@ const StockChart = styled.div`
   flex-shrink: 0;
   overflow: hidden;
   position: relative;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    width: 100%;
+    height: 200px;
+    flex-shrink: 1;
+  }
+
+  @media (max-width: 480px) {
+    height: 150px;
+  }
 `;
 
 const WeekRange = styled.div`
