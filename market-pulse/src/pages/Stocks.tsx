@@ -43,14 +43,26 @@ const SearchContainer = styled.div`
 
 const StocksGrid = styled.div`
   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 1.5rem;
+  
+  @media (max-width: ${theme.breakpoints.lg}) {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+  
+  @media (max-width: ${theme.breakpoints.md}) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const StockCard = styled(Card)`
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
   transition: all 0.3s ease;
   cursor: pointer;
+  padding: 1.5rem;
+  overflow: hidden;
+  position: relative;
 
   &:hover {
     transform: translateY(-2px);
@@ -69,7 +81,7 @@ const StockHeader = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
 `;
 
 const StockSymbol = styled.div`
@@ -86,7 +98,7 @@ const PriceInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
 `;
 
 const CurrentPrice = styled.div`
@@ -130,6 +142,8 @@ const StockChart = styled.div`
   width: 300px;
   height: 120px;
   flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
 `;
 
 const WeekRange = styled.div`
@@ -138,6 +152,8 @@ const WeekRange = styled.div`
   gap: 1rem;
   font-size: 0.875rem;
   color: ${theme.colors.textSecondary};
+  width: 100%;
+  overflow: hidden;
 `;
 
 const RangeBar = styled.div`
@@ -146,6 +162,8 @@ const RangeBar = styled.div`
   background: ${theme.colors.border};
   border-radius: 2px;
   position: relative;
+  max-width: 100%;
+  overflow: hidden;
 
   &::after {
     content: '';

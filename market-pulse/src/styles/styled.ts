@@ -8,23 +8,24 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
+
   html, body, #root {
-    font-family: 'Palatino Linotype', 'Libre Baskerville', 'Book Antiqua', Palatino, serif;
+    font-family: 'Quicksand', 'Segoe UI', Arial, sans-serif;
   }
 
   body {
-    font-family: 'Palatino Linotype', 'Libre Baskerville', 'Book Antiqua', Palatino, serif;
+    font-family: 'Quicksand', 'Segoe UI', Arial, sans-serif;
     background-color: #0a0a0a;
     color: #ffffff;
     line-height: 1.5;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Palatino Linotype', 'Libre Baskerville', 'Book Antiqua', Palatino, serif;
+    font-family: 'Quicksand', 'Segoe UI', Arial, sans-serif;
   }
 
   input, button, textarea, select {
-    font-family: 'Palatino Linotype', 'Libre Baskerville', 'Book Antiqua', Palatino, serif;
+    font-family: 'Quicksand', 'Segoe UI', Arial, sans-serif;
   }
 
   #root {
