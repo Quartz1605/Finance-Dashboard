@@ -1,4 +1,4 @@
-import { io, Socket } from 'socket.io-client';
+// Note: Socket.io imports removed as we now use REST API polling for Vercel compatibility
 import { useState, useEffect } from 'react';
 
 // Import existing interfaces from your mockData.ts
@@ -58,7 +58,6 @@ export interface Cryptocurrency {
 
 // API configuration - Use relative paths for Vercel deployment
 const BACKEND_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001';
-let socket: Socket | null = null;
 
 // Polling intervals for different data types
 const POLLING_INTERVALS = {
@@ -67,30 +66,6 @@ const POLLING_INTERVALS = {
   currencies: 7000,
   cryptos: 4000,
   news: 60000, // News updates less frequently
-};
-
-const initializeSocket = (): Socket => {
-  if (!socket) {
-    socket = io(BACKEND_URL, {
-      autoConnect: true,
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-    });
-    
-    socket.on('connect', () => {
-      console.log('✅ Connected to Market Pulse backend');
-    });
-    
-    socket.on('disconnect', () => {
-      console.log('❌ Disconnected from Market Pulse backend');
-    });
-    
-    socket.on('connect_error', (error: any) => {
-      console.error('🔥 Connection error:', error.message);
-    });
-  }
-  return socket;
 };
 
 // Real-time hooks using REST API polling for Vercel deployment
@@ -311,6 +286,3 @@ export const marketAPI = {
   getCryptos: () => fetch(`${BACKEND_URL}/api/cryptos`).then(res => res.json()),
   getNews: () => fetch(`${BACKEND_URL}/api/news`).then(res => res.json()),
 };
-
-// Export the socket instance for advanced use cases
-export { socket };
